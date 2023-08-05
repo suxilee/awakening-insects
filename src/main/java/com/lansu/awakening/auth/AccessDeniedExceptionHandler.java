@@ -23,30 +23,26 @@ public class AccessDeniedExceptionHandler implements AccessDeniedHandler {
         //CsrfException
         if (accessDeniedException instanceof CsrfException) {
             //Csrf异常
-            R result = R.create().setCode(403).setMessage("跨站请求保护");
             //使用json序列化返回，状态码200
-            HttpUtils.responseJson(response, result);
+            HttpUtils.responseJson(response,  R.result(401,"跨站请求保护"));
             return;
         }
         //CsrfException
         if (accessDeniedException instanceof org.springframework.security.web.server.csrf.CsrfException) {
             //Csrf异常
-            R result = R.create().setCode(403).setMessage("跨站请求保护");
             //使用json序列化返回，状态码200
-            HttpUtils.responseJson(response, result);
+            HttpUtils.responseJson(response, R.result(401,"跨站请求保护"));
             return;
         }
         //AuthorizationServiceException null
         if (accessDeniedException instanceof org.springframework.security.access.AuthorizationServiceException) {
             //授权服务异常
-            R result = R.create().setCode(403).setMessage("授权服务异常");
             //使用json序列化返回，状态码200
-            HttpUtils.responseJson(response, result);
+            HttpUtils.responseJson(response, R.result(401,"授权服务异常"));
             return;
         }
         //拒绝访问
-        R result = R.create().setCode(403).setMessage("权限不足,拒绝访问");
         //使用json序列化返回，状态码200
-        HttpUtils.responseJson(response, result);
+        HttpUtils.responseJson(response, R.result(401,"权限不足,拒绝访问"));
     }
 }

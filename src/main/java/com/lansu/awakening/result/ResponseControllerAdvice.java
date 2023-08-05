@@ -44,8 +44,8 @@ public class ResponseControllerAdvice implements ResponseBodyAdvice<Object> {
         // String类型不能直接包装，所以要进行些特别的处理
         if (returnType.getGenericParameterType().equals(String.class)) {
                 // 将数据包装在ResultVO里后，再转换为json字符串响应给前端
-                return JSONObject.toJSONString(R.ok(body));
+                return JSONObject.toJSONString(R.ok().data(body));
         }
-        return R.ok(body);
+        return R.ok().data(body);
     }
 }

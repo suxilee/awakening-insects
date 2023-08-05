@@ -28,95 +28,80 @@ public class AuthenticationExceptionHandler implements AuthenticationEntryPoint 
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         //异常为AuthenticationServiceException类 或 AuthenticationServiceException类
         if (authException instanceof AuthenticationServiceException) {
-            //身份验证服务异常
-            R result = R.create().setCode(401).setMessage("身份验证服务异常");
             //使用json序列化返回，状态码200
-            HttpUtils.responseJson(response, result);
+            HttpUtils.responseJson(response, R.result(401,"身份验证服务异常"));
             return;
         }
         //异常为 UsernameNotFoundException
         if (authException instanceof UsernameNotFoundException) {
-            //用户名不存在
-            R result = R.create().setCode(401).setMessage("用户名不存在");
+            //用户名不存在  R.result(401,"用户名不存在")
             //使用json序列化返回，状态码200
-            HttpUtils.responseJson(response, result);
+            HttpUtils.responseJson(response, R.result(401,"用户名不存在"));
             return;
         }
         //ProviderNotFoundException
         if (authException instanceof ProviderNotFoundException) {
             //找不到身份验证提供者
-            R result = R.create().setCode(401).setMessage("找不到身份验证提供者");
             //使用json序列化返回，状态码200
-            HttpUtils.responseJson(response, result);
+            HttpUtils.responseJson(response, R.result(401,"找不到身份验证提供者"));
             return;
         }
         //PreAuthenticatedCredentialsNotFoundException
         if (authException instanceof PreAuthenticatedCredentialsNotFoundException) {
-            //找不到预先验证的凭据
-            R result = R.create().setCode(401).setMessage("找不到预先验证的凭据");
             //使用json序列化返回，状态码200
-            HttpUtils.responseJson(response, result);
+            HttpUtils.responseJson(response, R.result(401,"找不到预先验证的凭据"));
             return;
         }
         //NonceExpiredException
         if (authException instanceof NonceExpiredException) {
             //Nonce已过期
-            R result = R.create().setCode(401).setMessage("Nonce已过期");
             //使用json序列化返回，状态码200
-            HttpUtils.responseJson(response, result);
+            HttpUtils.responseJson(response, R.result(401,"Nonce已过期"));
             return;
         }
         //BadCredentialsException
         if (authException instanceof BadCredentialsException) {
-            //账号或密码错误
-            R result = R.create().setCode(401).setMessage("账号或密码错误");
             //使用json序列化返回，状态码200
-            HttpUtils.responseJson(response, result);
+            HttpUtils.responseJson(response, R.result(401,"账号或密码错误"));
             return;
         }
         //RememberMeAuthenticationException null
         if (authException instanceof RememberMeAuthenticationException) {
             //自动登录异常
-            R result = R.create().setCode(401).setMessage("自动登录异常");
             //使用json序列化返回，状态码200
-            HttpUtils.responseJson(response, result);
+            HttpUtils.responseJson(response, R.result(401,"账号或密码错误"));
             return;
         }
         //InsufficientAuthenticationException null
         if (authException instanceof InsufficientAuthenticationException) {
             //身份验证不足
-            R result = R.create().setCode(401).setMessage("身份验证不足");
             //使用json序列化返回，状态码200
-            HttpUtils.responseJson(response, result);
+            HttpUtils.responseJson(response, R.result(401,"身份验证不足"));
             return;
         }
         //AuthenticationCredentialsNotFoundException null
         if (authException instanceof AuthenticationCredentialsNotFoundException) {
             //未找到密码
-            R result = R.create().setCode(401).setMessage("账号或密码错误");
             //使用json序列化返回，状态码200
-            HttpUtils.responseJson(response, result);
+            HttpUtils.responseJson(response, R.result(401,"账号或密码错误"));
             return;
         }
         // AccountStatusException null
         if (authException instanceof AccountStatusException) {
             //账号状态异常
-            R result = R.create().setCode(401).setMessage("账号已禁用");
             //使用json序列化返回，状态码200
-            HttpUtils.responseJson(response, result);
+            HttpUtils.responseJson(response, R.result(401,"账号已禁用"));
             return;
         }
         //SessionAuthenticationException null
         if (authException instanceof SessionAuthenticationException) {
             //会话身份验证异常
-            R result = R.create().setCode(401).setMessage("会话身份验证异常");
             //使用json序列化返回，状态码200
-            HttpUtils.responseJson(response, result);
+            HttpUtils.responseJson(response, R.result(401,"会话身份验证异常"));
             return;
         }
         //身份验证异常
-        R result = R.create().setCode(401).setMessage("身份验证异常");
         //使用json序列化返回，状态码200
-        HttpUtils.responseJson(response, result);
+        HttpUtils.responseJson(response, R.result(401,"身份验证异常"));
     }
 }

@@ -14,7 +14,7 @@ import java.io.Serializable;
  * @date 2023/08/05
  */
 @Getter
-public class R<T> implements Serializable,ResultCode{
+public class R<T> implements Serializable, ResultCode {
     private Integer code;
     private String message;
     private T data;
@@ -24,16 +24,37 @@ public class R<T> implements Serializable,ResultCode{
 
     public static <T> R<T> ok() {
         R<T> r = new R<>();
-        r.code = 200;
-        r.message = "成功";
+        r.code = SUCCESS_CODE;
+        r.message = SUCCESS_MESSAGE;
         return r;
     }
 
-    //error方法
+
     public static <T> R<T> error() {
         R<T> r = new R<>();
-        r.code = 500;
-        r.message = "服务器未知错误";
+        r.code = ERROR_CODE;
+        r.message = ERROR_MESSAGE;
+        return r;
+    }
+
+    public static <T> R<T> failed() {
+        R<T> r = new R<>();
+        r.code = FAILED_CODE;
+        r.message = FAILED_MESSAGE;
+        return r;
+    }
+
+    public static <T> R<T> result(ResultCode code) {
+        R<T> r = new R<>();
+        r.code = code.getCode();
+        r.message = code.getMessage();
+        return r;
+    }
+
+    public static <T> R<T> result(Integer code, String message) {
+        R<T> r = new R<>();
+        r.code = code;
+        r.message = message;
         return r;
     }
 
