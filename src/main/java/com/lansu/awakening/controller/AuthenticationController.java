@@ -41,8 +41,8 @@ public class AuthenticationController {
      */
     @PostMapping("/register")
     @Log4ai("注册用户")
-    public R<AuthenticationResponse> register(@RequestBody RegisterRequest request) throws JOSEException {
-        return R.<AuthenticationResponse>ok().data(service.register(request));
+    public R register(@RequestBody RegisterRequest request) throws JOSEException {
+        return R.ok().data(service.register(request));
     }
 
     /**
@@ -52,8 +52,8 @@ public class AuthenticationController {
      * @return {@link ResponseEntity}<{@link AuthenticationResponse}>
      */
     @PostMapping("/login")
-    public R<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) throws JOSEException {
-        return R.<AuthenticationResponse>ok().data(service.authenticate(request));
+    public R authenticate(@RequestBody AuthenticationRequest request) throws JOSEException {
+        return R.ok().data(service.authenticate(request));
     }
 
     /**
