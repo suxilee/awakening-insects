@@ -1,6 +1,7 @@
 package com.lansu.awakening.aop;
 
 import com.alibaba.fastjson2.JSONObject;
+import com.lansu.awakening.annotation.Desensitize;
 import com.lansu.awakening.annotation.Log4ai;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -12,6 +13,9 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 
 /**
  * Log4ai注解aop
@@ -48,10 +52,25 @@ public class Log4aiAspect {
         //2.获取方法的参数，获取方法描述
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         String description = getMethodDescription(joinPoint);
+        // 数据脱敏判断 获取方法参数注解
+        Method method1 = ((MethodSignature) joinPoint.getSignature()).getMethod();
+        Annotation[][] annotations = method1.getParameterAnnotations();
+        // 遍历参数
+        Object[] args = joinPoint.getArgs();
+        for (int i = 0; i < args.length; i++) {
+            for (Annotation annotation : annotations[i]) {
+                // 判断参数注解
+                if (annotation instanceof Desensitize) {
+                    // 脱敏处理
+                    args[i] = "********";
+                    break;
+                }
+            }
+        }
         //3.打印日志
         log.info("请求开始: {}, uri: {}, method: {}, function:{}(){}, args: {}"
                 , attributes.getSessionId(), uri, method, signature.getName(), description
-                , JSONObject.toJSONString(joinPoint.getArgs()));
+                , JSONObject.toJSONString(args));
         long startTime = System.currentTimeMillis();
         //获取响应结果
         Object result = joinPoint.proceed();

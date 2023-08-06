@@ -51,7 +51,7 @@ public class R implements Serializable, ResultCode {
         return r;
     }
 
-    public static <T> R result(Integer code, String message) {
+    public static  R result(Integer code, String message) {
         R r = new R();
         r.code = code;
         r.message = message;
@@ -63,15 +63,8 @@ public class R implements Serializable, ResultCode {
         return this;
     }
 
-    public Integer getCode() {
-        return code;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public Object getData() {
-        return data;
+    public R message(String message) {
+        this.message = message;
+        return this;
     }
 }

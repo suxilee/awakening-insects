@@ -74,7 +74,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public AuthenticationResponse register(RegisterRequest request) throws JOSEException {
+    public Boolean register(RegisterRequest request) throws JOSEException {
         //创建用户
         User user = User.create()
                 .setUsername(request.getUsername())
@@ -82,17 +82,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         //设置用户id
         Object id = flexId.generate(user, "id");
         user.setId((Long) id);
-        userMapper.insert(user);
+        int insert = userMapper.insert(user);
         //设置普通角色身份
         userRoleMapper.insert(UserRole.create()
                 .setUserId(user.getId())
                 .setRoleId(3L));
         //生成令牌 todo 需修改为注册结果
-        return AuthenticationResponse
-                .builder()
-                .accessToken(JwtUtils.generateToken(user.getUsername(), tokenExpireTime))
-                .refreshToken(JwtUtils.generateToken(user.getUsername(), refreshTokenExpireTime))
-                .build();
+        return insert > 0;
     }
 
     @Override

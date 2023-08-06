@@ -104,6 +104,8 @@
         </filter>
     </appender>
 
+
+
     <root level="info">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="DEBUG_FILE"/>
@@ -112,5 +114,5 @@
         <appender-ref ref="ERROR_FILE"/>
     </root>
 
-    <logger name="org.lansu.demo.controller" level="debug"/>
+    <logger name="org.lansu.awakening.controller" level="debug"/>
 </configuration>

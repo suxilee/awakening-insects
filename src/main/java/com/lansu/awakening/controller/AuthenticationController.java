@@ -1,5 +1,6 @@
 package com.lansu.awakening.controller;
 
+import com.lansu.awakening.annotation.Desensitize;
 import com.lansu.awakening.annotation.Log4ai;
 import com.lansu.awakening.controller.dto.AuthenticationRequest;
 import com.lansu.awakening.controller.dto.RegisterRequest;
@@ -41,8 +42,8 @@ public class AuthenticationController {
      */
     @PostMapping("/register")
     @Log4ai("注册用户")
-    public R register(@RequestBody RegisterRequest request) throws JOSEException {
-        return R.ok().data(service.register(request));
+    public R register(@RequestBody @Desensitize RegisterRequest request) throws JOSEException {
+        return service.register(request)?R.ok().message("注册成功"):R.failed().message("注册失败");
     }
 
     /**

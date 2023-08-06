@@ -9,11 +9,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -72,6 +74,7 @@ public class SecurityConfiguration {
      * @throws Exception 异常
      */
     @Bean
+    @Order(1)
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         Map<String, List<String>> rolePermission = getRolePermission();
         rolePermission.forEach((key, value) -> {
@@ -90,7 +93,6 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests.requestMatchers(
                                         "/api/v1/auth/**",
-                                        "/login",
                                         "/v2/api-docs",
                                         "/v3/api-docs",
                                         "/v3/api-docs/**",
@@ -103,7 +105,6 @@ public class SecurityConfiguration {
                                         "/swagger-ui.html").permitAll()
                                 .anyRequest().authenticated()
                 );
-
         //其它设置
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
@@ -119,11 +120,20 @@ public class SecurityConfiguration {
                     logout.addLogoutHandler(logoutHandler);
                     logout.logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext());
                 })
-
         ;
         return http.build();
     }
 
+    /**
+     * Web安全定制器
+     *
+     * @return {@link WebSecurityCustomizer}
+     */
+//    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer(){
+        //放行所有请求，通过上方@bean控制，方便开发环境调试
+        return webSecurity -> webSecurity.ignoring().anyRequest();
+    }
 
     /**
      * 获得角色权限

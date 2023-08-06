@@ -24,7 +24,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.zaxxer:HikariCP:5.0.1'
+    implementation 'com.zaxxer:HikariCP'
     implementation 'com.nimbusds:nimbus-jose-jwt:9.31'
 
     implementation 'com.mybatis-flex:mybatis-flex-spring-boot-starter:1.5.6'

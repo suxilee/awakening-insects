@@ -20,7 +20,7 @@ public interface AuthenticationService {
      * @param request 请求
      * @return {@link AuthenticationResponse}
      */
-    AuthenticationResponse register(RegisterRequest request) throws JOSEException;
+    Boolean register(RegisterRequest request) throws JOSEException;
 
     /**
      * 进行身份验证
