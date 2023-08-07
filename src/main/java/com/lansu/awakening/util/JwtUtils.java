@@ -42,7 +42,7 @@ public class JwtUtils {
 
     static {
         try {
-            // Load RSA key pair from file
+            // 载入RSA密钥
             InputStream privateKeyInputStream = JwtUtils.class.getClassLoader().getResourceAsStream(PRIVATE_KEY_FILENAME);
             byte[] privateKeyBytes = readAllBytes(privateKeyInputStream);
             PKCS8EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(privateKeyBytes);
@@ -54,7 +54,7 @@ public class JwtUtils {
             X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(publicKeyBytes);
             publicKey = keyFactory.generatePublic(publicKeySpec);
 
-            // Create JWK for RSA key pair
+            // 创建RSAKEY
             rsaKey = new RSAKey.Builder((RSAPublicKey) publicKey)
                     .privateKey(privateKey)
                     .keyUse(KeyUse.SIGNATURE)
@@ -80,24 +80,21 @@ public class JwtUtils {
      * @throws JOSEException joseexception
      */
     public static String generateToken(String subject, long expirationTime) throws JOSEException {
-        // Create JWT header with RS256 algorithm
+        // 创建jwt 算法头 rs256
         JWSHeader header = new JWSHeader.Builder(JWSAlgorithm.RS256)
                 .keyID(rsaKey.getKeyID())
                 .build();
-        // Create JWT payload with subject and expiration time
+        // 创建载体
         JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
                 .subject(subject)
                 .expirationTime(new Date(System.currentTimeMillis() + expirationTime))
                 .build();
         Payload payload = new Payload(claimsSet.toJSONObject());
-        // Create JWS object with header and payload
+        // 创建JWS对象
         JWSObject jwsObject = new JWSObject(header, payload);
-
-        // Sign JWS object with RSA private key
+        // 创建签名
         RSASSASigner signer = new RSASSASigner(privateKey);
         jwsObject.sign(signer);
-
-        // Serialize JWS object to compact format
         return jwsObject.serialize();
     }
 
@@ -110,9 +107,9 @@ public class JwtUtils {
      * @throws ParseException 解析异常
      */
     public static boolean validateToken(String token) throws JOSEException, ParseException {
-        // Parse JWS object from compact format
+        // 解析令牌
         JWSObject jwsObject = JWSObject.parse(token);
-        // Verify JWS object signature with RSA public key
+        // 公钥验签
         RSASSAVerifier verifier = new RSASSAVerifier((RSAPublicKey) publicKey);
         return jwsObject.verify(verifier);
     }

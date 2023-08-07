@@ -7,6 +7,9 @@ import com.mybatisflex.core.keygen.KeyGenerators;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 /**
  * 用户
  *
@@ -16,8 +19,10 @@ import lombok.experimental.Accessors;
 @Table("sys_user")
 @Accessors(chain = true)
 @Data(staticConstructor = "create")
-public class User {
+public class User implements Serializable {
 
+    @Serial
+    private static final long serialVersionUID = 1L;
     /**
      * 用户ID
      */

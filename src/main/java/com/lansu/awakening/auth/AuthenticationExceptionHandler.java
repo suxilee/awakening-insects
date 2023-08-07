@@ -76,7 +76,7 @@ public class AuthenticationExceptionHandler implements AuthenticationEntryPoint 
         if (authException instanceof InsufficientAuthenticationException) {
             //身份验证不足
             //使用json序列化返回，状态码200
-            HttpUtils.responseJson(response, R.result(401,"身份验证不足"));
+            HttpUtils.responseJson(response, R.result(401,"身份验证失败,请重新登录"));
             return;
         }
         //AuthenticationCredentialsNotFoundException null

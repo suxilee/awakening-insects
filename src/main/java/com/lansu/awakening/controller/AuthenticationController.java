@@ -42,8 +42,8 @@ public class AuthenticationController {
      */
     @PostMapping("/register")
     @Log4ai("注册用户")
-    public R register(@RequestBody @Desensitize RegisterRequest request) throws JOSEException {
-        return service.register(request)?R.ok().message("注册成功"):R.failed().message("注册失败");
+    public String register(@RequestBody @Desensitize RegisterRequest request) throws JOSEException {
+        return service.register(request)?"注册成功":"注册失败";
     }
 
     /**
@@ -53,8 +53,9 @@ public class AuthenticationController {
      * @return {@link ResponseEntity}<{@link AuthenticationResponse}>
      */
     @PostMapping("/login")
-    public R authenticate(@RequestBody AuthenticationRequest request) throws JOSEException {
-        return R.ok().data(service.authenticate(request));
+    @Log4ai
+    public AuthenticationResponse authenticate(@RequestBody AuthenticationRequest request) throws JOSEException {
+        return service.authenticate(request);
     }
 
     /**

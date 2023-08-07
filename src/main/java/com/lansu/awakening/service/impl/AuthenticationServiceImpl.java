@@ -1,5 +1,6 @@
 package com.lansu.awakening.service.impl;
 
+import com.alibaba.fastjson2.JSONObject;
 import com.lansu.awakening.controller.dto.AuthenticationRequest;
 import com.lansu.awakening.controller.dto.RegisterRequest;
 import com.lansu.awakening.controller.vo.AuthenticationResponse;
@@ -87,20 +88,19 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         userRoleMapper.insert(UserRole.create()
                 .setUserId(user.getId())
                 .setRoleId(3L));
-        //生成令牌 todo 需修改为注册结果
         return insert > 0;
     }
 
     @Override
     public AuthenticationResponse authenticate(AuthenticationRequest request) throws JOSEException {
         //验证用户
-        Authentication token = authenticationManager.authenticate(
+        Authentication authenticate = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getUsername()
                         , request.getPassword()));
         //生成令牌
         return AuthenticationResponse
                 .builder()
-                .accessToken(JwtUtils.generateToken(request.getUsername(), tokenExpireTime))
+                .accessToken(JwtUtils.generateToken(JSONObject.toJSONString(authenticate), tokenExpireTime))
                 .refreshToken(JwtUtils.generateToken(request.getUsername(), refreshTokenExpireTime))
                 .build();
     }

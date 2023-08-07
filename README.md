@@ -12,8 +12,9 @@
 
 | 功能                    | 所在位置                                            |
 | ----------------------- | --------------------------------------------------- |
-| 请求日志拦截            | com.lansu.awakening.aop.Log4aiAspect                |
+| 请求日志拦截            | com.lansu.awakening.aop.Log4aiAspect.Java           |
 | Spring Security相关配置 | com.lansu.awakening.auth                            |
 | Mybatis-Flex配置        | com.lansu.awakening.config.MyBatisFlexConfiguration |
 | 统一请求返回            | com.lansu.awakening.config.MyBatisFlexConfiguration |
 | 统一异常处理            | com.lansu.awakening.exception                       |
+| Jwt密钥生成             | com/lansu/awakening/util/RSAKeyGenerator.java       |

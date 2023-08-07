@@ -1,5 +1,7 @@
 package com.lansu.awakening.auth;
 
+import com.alibaba.fastjson2.JSONException;
+import com.alibaba.fastjson2.JSONObject;
 import com.lansu.awakening.util.JwtUtils;
 import com.nimbusds.jose.JOSEException;
 import jakarta.servlet.FilterChain;
@@ -45,7 +47,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         //获取基础信息
         final String authHeader = request.getHeader("Authorization");
         final String jwt;
-        final String username;
+        final String subject;
         //非Bearer 开头的Authorization头部信息直接放行
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
@@ -65,27 +67,27 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if (JwtUtils.isTokenExpired(jwt)) {
                 log.info("token已过期");
                 //使用response返回错误信息
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "token已过期");
+                response.sendError(HttpServletResponse.SC_OK, "token已过期");
                 return;
             }
-            //解析jwt获取用户名
-            username = JwtUtils.getSubject(jwt);
-            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
             //todo 校验token是否在黑名单中
+            //解析jwt获取凭证
+            subject = JwtUtils.getSubject(jwt);
+            Authentication authentication = JSONObject.parseObject(subject, Authentication.class);
             //设置请求安全上下文
-            UsernamePasswordAuthenticationToken authenticationToken =
-                    new UsernamePasswordAuthenticationToken(userDetails.getUsername()
-                            , userDetails.getPassword()
-                            , userDetails.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (ParseException e) {
             log.warn("token解析失败:{}", e.getMessage());
             //使用response返回错误信息
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
+            response.sendError(HttpServletResponse.SC_OK, e.getMessage());
             return;
         } catch (JOSEException e) {
             log.warn("token校验失败:{}", e.getMessage());
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+            response.sendError(HttpServletResponse.SC_OK, e.getMessage());
+            return;
+        } catch (JSONException e){
+            log.warn("token解析失败:{}", e.getMessage());
+            response.sendError(HttpServletResponse.SC_OK, e.getMessage());
             return;
         }
         filterChain.doFilter(request, response);

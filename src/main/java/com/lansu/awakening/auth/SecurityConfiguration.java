@@ -74,7 +74,6 @@ public class SecurityConfiguration {
      * @throws Exception 异常
      */
     @Bean
-    @Order(1)
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         Map<String, List<String>> rolePermission = getRolePermission();
         rolePermission.forEach((key, value) -> {

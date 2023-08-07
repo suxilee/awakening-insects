@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <settings>
+        <!-- 开启二级缓存 -->
+        <setting name="cacheEnabled" value="true"/>
+        <!-- 设置缓存的全局清理策略，默认是LRU（最近最少使用） -->
+        <setting name="cacheEviction" value="LRU"/>
+        <!-- 设置缓存的全局刷新间隔时间，单位是毫秒 -->
+        <setting name="cacheFlushInterval" value="60000"/>
+        <!-- 设置缓存的全局大小 -->
+        <setting name="cacheSize" value="512"/>
+    </settings>
+</configuration>

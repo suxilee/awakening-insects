@@ -21,9 +21,7 @@ import java.lang.reflect.AnnotatedElement;
  * @author sulan
  * @date 2023/08/06
  */
-@RestControllerAdvice(basePackages = {
-        "com.lansu.awakening.controller"
-})
+@RestControllerAdvice
 @Slf4j
 public class ResponseControllerAdvice implements ResponseBodyAdvice<Object> {
 
@@ -41,6 +39,8 @@ public class ResponseControllerAdvice implements ResponseBodyAdvice<Object> {
 
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
+        //将response 响应头设置为json格式
+        response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
         // String类型不能直接包装，所以要进行些特别的处理
         if (returnType.getGenericParameterType().equals(String.class)) {
                 // 将数据包装在ResultVO里后，再转换为json字符串响应给前端

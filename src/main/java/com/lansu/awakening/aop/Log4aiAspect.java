@@ -3,6 +3,7 @@ package com.lansu.awakening.aop;
 import com.alibaba.fastjson2.JSONObject;
 import com.lansu.awakening.annotation.Desensitize;
 import com.lansu.awakening.annotation.Log4ai;
+import com.lansu.awakening.util.HttpUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -67,9 +68,10 @@ public class Log4aiAspect {
                 }
             }
         }
+        String ipAddr = HttpUtils.getIpAddr(request);
         //3.打印日志
-        log.info("请求开始: {}, uri: {}, method: {}, function:{}(){}, args: {}"
-                , attributes.getSessionId(), uri, method, signature.getName(), description
+        log.info("请求开始: {}, ip: {}, uri: {}, method: {}, function: {}()//{}, args: {}"
+                , attributes.getSessionId(), ipAddr, uri, method, signature.getName(), description
                 , JSONObject.toJSONString(args));
         long startTime = System.currentTimeMillis();
         //获取响应结果
