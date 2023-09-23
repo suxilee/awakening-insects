@@ -81,11 +81,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .setPassword(passwordEncoder.encode(request.getPassword())).setEnabled(1);
         //设置用户id
         Object id = flexId.generate(user, "id");
-        user.setId((Long) id);
+        user.setUserId((Long) id);
         int insert = userMapper.insert(user);
         //设置普通角色身份
         userRoleMapper.insert(UserRole.create()
-                .setUserId(user.getId())
+                .setUserId(user.getUserId())
                 .setRoleId(3L));
         return insert > 0;
     }

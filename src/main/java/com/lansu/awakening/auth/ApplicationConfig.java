@@ -59,9 +59,9 @@ public class ApplicationConfig {
                     , fieldQueryBuilder -> fieldQueryBuilder.field(UserDetailsDO::getRoles)
                             .queryWrapper(userDetailsDO -> QueryWrapper.create()
                                     //关联查询角色
-                                    .select().from(ROLE).where(ROLE.ID.in(select(new QueryColumn("role_id"))
+                                    .select().from(ROLE).where(ROLE.ROLE_ID.in(select(new QueryColumn("role_id"))
                                             .from("sys_user_role")
-                                            .where("user_id = ?", userDetailsDO.getId()))
+                                            .where("user_id = ?", userDetailsDO.getUserId()))
                                     )
                             )
             );
