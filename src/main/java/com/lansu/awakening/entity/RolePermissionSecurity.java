@@ -7,30 +7,33 @@ import com.mybatisflex.core.keygen.KeyGenerators;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.util.List;
+
 /**
- * 角色权限关联关系
+ * 角色权限关联权限表查询
  *
  * @author sulan
  * @date 2023/08/04
  */
-@Table("sys_role_permission")
+@Table("sys_role")
 @Accessors(chain = true)
 @Data(staticConstructor = "create")
-public class RolePermissionRel {
-
+public class RolePermissionSecurity {
     /**
-     * zhujian
+     * 用户ID
      */
     @Id(keyType= KeyType.Generator, value= KeyGenerators.flexId)
     private Long id;
 
     /**
-     * 角色ID
+     * 角色名
      */
-    private Long roleId;
+    private String roleName;
 
     /**
-     * 权限ID
+     * 角色代码
      */
-    private Long permissionId;
+    private String roleCode;
+
+    private List<Permission> permissions;
 }

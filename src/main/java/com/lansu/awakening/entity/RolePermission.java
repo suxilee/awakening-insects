@@ -7,40 +7,40 @@ import com.mybatisflex.core.keygen.KeyGenerators;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.io.Serial;
-import java.io.Serializable;
-
 /**
- * 用户
+ * 角色权限关联关系
  *
  * @author sulan
- * @date 2023/08/03
+ * @date 2023/08/04
  */
-@Table("sys_user")
+@Table("sys_role_permission")
 @Accessors(chain = true)
 @Data(staticConstructor = "create")
-public class User implements Serializable {
-
-    @Serial
-    private static final long serialVersionUID = 1L;
-    /**
-     * 用户ID
-     */
-    @Id(keyType= KeyType.None)
-    private Long userId;
+public class RolePermission {
 
     /**
-     * 用户名
+     * zhujian
      */
-    private String username;
+    @Id(keyType= KeyType.Generator, value= KeyGenerators.flexId)
+    private Long id;
 
     /**
-     * 密码
+     * 角色ID
      */
-    private String password;
+    private Long roleId;
 
     /**
-     * 启用
+     * 权限ID
      */
-    private Integer enabled;
+    private Long permissionId;
+
+    /**
+     * api
+     */
+    private String api;
+
+    /**
+     * 请求方式
+     */
+    private String apiMethod;
 }

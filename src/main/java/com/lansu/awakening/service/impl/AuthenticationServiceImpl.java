@@ -1,9 +1,9 @@
 package com.lansu.awakening.service.impl;
 
 import com.alibaba.fastjson2.JSONObject;
-import com.lansu.awakening.controller.dto.AuthenticationRequest;
-import com.lansu.awakening.controller.dto.RegisterRequest;
-import com.lansu.awakening.controller.vo.AuthenticationResponse;
+import com.lansu.awakening.controller.dto.AuthenticationRequestDTO;
+import com.lansu.awakening.controller.dto.RegisterRequestDTO;
+import com.lansu.awakening.controller.vo.AuthenticationResponseVO;
 import com.lansu.awakening.entity.User;
 import com.lansu.awakening.entity.UserRole;
 import com.lansu.awakening.mapper.UserMapper;
@@ -11,7 +11,6 @@ import com.lansu.awakening.mapper.UserRoleMapper;
 import com.lansu.awakening.service.AuthenticationService;
 import com.lansu.awakening.util.JwtUtils;
 import com.mybatisflex.core.keygen.impl.FlexIDKeyGenerator;
-import com.mybatisflex.core.query.QueryWrapper;
 import com.nimbusds.jose.JOSEException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -20,14 +19,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.lansu.awakening.entity.table.UserTableDef.USER;
 
-
+/**
+ * @author sulan
+ */
 @Service
 @RequiredArgsConstructor
 public class AuthenticationServiceImpl implements AuthenticationService {
@@ -75,7 +74,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Boolean register(RegisterRequest request) throws JOSEException {
+    public Boolean register(RegisterRequestDTO request) throws JOSEException {
         //创建用户
         User user = User.create()
                 .setUsername(request.getUsername())
@@ -92,13 +91,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public AuthenticationResponse authenticate(AuthenticationRequest request) throws JOSEException {
+    public AuthenticationResponseVO authenticate(AuthenticationRequestDTO request) throws JOSEException {
         //验证用户
         Authentication authenticate = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getUsername()
                         , request.getPassword()));
         //生成令牌
-        return AuthenticationResponse
+        return AuthenticationResponseVO
                 .builder()
                 .accessToken(JwtUtils.generateToken(JSONObject.toJSONString(authenticate), tokenExpireTime))
                 .refreshToken(JwtUtils.generateToken(request.getUsername(), refreshTokenExpireTime))

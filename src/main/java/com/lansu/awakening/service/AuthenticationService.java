@@ -1,8 +1,8 @@
 package com.lansu.awakening.service;
 
-import com.lansu.awakening.controller.dto.AuthenticationRequest;
-import com.lansu.awakening.controller.dto.RegisterRequest;
-import com.lansu.awakening.controller.vo.AuthenticationResponse;
+import com.lansu.awakening.controller.dto.AuthenticationRequestDTO;
+import com.lansu.awakening.controller.dto.RegisterRequestDTO;
+import com.lansu.awakening.controller.vo.AuthenticationResponseVO;
 import com.nimbusds.jose.JOSEException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,17 +18,17 @@ public interface AuthenticationService {
      * 注册
      *
      * @param request 请求
-     * @return {@link AuthenticationResponse}
+     * @return {@link AuthenticationResponseVO}
      */
-    Boolean register(RegisterRequest request) throws JOSEException;
+    Boolean register(RegisterRequestDTO request) throws JOSEException;
 
     /**
      * 进行身份验证
      *
      * @param request 请求
-     * @return {@link AuthenticationResponse}
+     * @return {@link AuthenticationResponseVO}
      */
-    AuthenticationResponse authenticate(AuthenticationRequest request) throws JOSEException;
+    AuthenticationResponseVO authenticate(AuthenticationRequestDTO request) throws JOSEException;
 
     /**
      * 刷新令牌

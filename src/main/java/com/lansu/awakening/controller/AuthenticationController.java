@@ -2,10 +2,9 @@ package com.lansu.awakening.controller;
 
 import com.lansu.awakening.annotation.Desensitize;
 import com.lansu.awakening.annotation.Log4ai;
-import com.lansu.awakening.controller.dto.AuthenticationRequest;
-import com.lansu.awakening.controller.dto.RegisterRequest;
-import com.lansu.awakening.controller.vo.AuthenticationResponse;
-import com.lansu.awakening.result.R;
+import com.lansu.awakening.controller.dto.AuthenticationRequestDTO;
+import com.lansu.awakening.controller.dto.RegisterRequestDTO;
+import com.lansu.awakening.controller.vo.AuthenticationResponseVO;
 import com.lansu.awakening.service.AuthenticationService;
 import com.nimbusds.jose.JOSEException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -38,11 +37,11 @@ public class AuthenticationController {
      * 注册
      *
      * @param request 请求
-     * @return {@link ResponseEntity}<{@link AuthenticationResponse}>
+     * @return {@link ResponseEntity}<{@link AuthenticationResponseVO}>
      */
     @PostMapping("/register")
     @Log4ai("注册用户")
-    public String register(@RequestBody @Desensitize RegisterRequest request) throws JOSEException {
+    public String register(@RequestBody @Desensitize RegisterRequestDTO request) throws JOSEException {
         return service.register(request)?"注册成功":"注册失败";
     }
 
@@ -50,11 +49,11 @@ public class AuthenticationController {
      * 进行身份验证
      *
      * @param request 请求
-     * @return {@link ResponseEntity}<{@link AuthenticationResponse}>
+     * @return {@link ResponseEntity}<{@link AuthenticationResponseVO}>
      */
     @PostMapping("/login")
     @Log4ai
-    public AuthenticationResponse authenticate(@RequestBody AuthenticationRequest request) throws JOSEException {
+    public AuthenticationResponseVO authenticate(@RequestBody AuthenticationRequestDTO request) throws JOSEException {
         return service.authenticate(request);
     }
 

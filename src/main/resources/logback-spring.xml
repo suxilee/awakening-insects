@@ -23,16 +23,14 @@
     <!-- 时间滚动输出 level为 DEBUG 日志 -->
     <appender name="DEBUG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <!-- rollover daily -->
             <fileNamePattern>${log.path}/debug/log-debug-%d{yyyy-MM-dd}.%i.txt</fileNamePattern>
-            <!-- each file should be at most 100MB, keep 60 days worth of history, but at most 20GB -->
-            <maxFileSize>20MB</maxFileSize>
+            <maxFileSize>2MB</maxFileSize>
             <maxHistory>7</maxHistory>
             <totalSizeCap>10GB</totalSizeCap>
         </rollingPolicy>
         <encoder>
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
-            <charset>UTF-8</charset> <!-- 设置字符集 -->
+            <charset>UTF-8</charset>
         </encoder>
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>debug</level>
@@ -44,16 +42,14 @@
     <!-- 时间滚动输出 level为 INFO 日志 -->
     <appender name="INFO_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <!-- rollover daily -->
             <fileNamePattern>${log.path}/info/log-info-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
-            <!-- each file should be at most 100MB, keep 60 days worth of history, but at most 20GB -->
-            <maxFileSize>20MB</maxFileSize>
-            <maxHistory>180</maxHistory>
-            <totalSizeCap>10GB</totalSizeCap>
+            <maxFileSize>2MB</maxFileSize>
+            <maxHistory>365</maxHistory>
+            <totalSizeCap>10240GB</totalSizeCap>
         </rollingPolicy>
         <encoder>
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
-            <charset>UTF-8</charset> <!-- 设置字符集 -->
+            <charset>UTF-8</charset>
         </encoder>
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>info</level>
@@ -65,16 +61,14 @@
     <!-- 时间滚动输出 level为 WARN 日志 -->
     <appender name="WARN_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <!-- rollover daily -->
             <fileNamePattern>${log.path}/warn/log-warn-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
-            <!-- each file should be at most 100MB, keep 60 days worth of history, but at most 20GB -->
-            <maxFileSize>20MB</maxFileSize>
+            <maxFileSize>2MB</maxFileSize>
             <maxHistory>180</maxHistory>
             <totalSizeCap>10GB</totalSizeCap>
         </rollingPolicy>
         <encoder>
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
-            <charset>UTF-8</charset> <!-- 设置字符集 -->
+            <charset>UTF-8</charset>
         </encoder>
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>warn</level>
@@ -88,14 +82,13 @@
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <!-- rollover daily -->
             <fileNamePattern>${log.path}/error/log-error-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
-            <!-- each file should be at most 100MB, keep 60 days worth of history, but at most 20GB -->
-            <maxFileSize>20MB</maxFileSize>
+            <maxFileSize>2MB</maxFileSize>
             <maxHistory>180</maxHistory>
             <totalSizeCap>10GB</totalSizeCap>
         </rollingPolicy>
         <encoder>
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
-            <charset>UTF-8</charset> <!-- 设置字符集 -->
+            <charset>UTF-8</charset>
         </encoder>
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>error</level>
@@ -103,8 +96,6 @@
             <onMismatch>DENY</onMismatch>
         </filter>
     </appender>
-
-
 
     <root level="info">
         <appender-ref ref="CONSOLE"/>
@@ -114,5 +105,5 @@
         <appender-ref ref="ERROR_FILE"/>
     </root>
 
-    <logger name="org.lansu.awakening.controller" level="debug"/>
+
 </configuration>

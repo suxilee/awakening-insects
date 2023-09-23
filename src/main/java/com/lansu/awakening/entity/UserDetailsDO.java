@@ -36,7 +36,7 @@ public class UserDetailsDO implements UserDetails , Serializable {
      * 用户ID
      */
     @Id(keyType = KeyType.Generator, value = KeyGenerators.flexId)
-    private Long id;
+    private Long userId;
 
     /**
      * 用户名

@@ -1,35 +1,28 @@
 package com.lansu.awakening.auth;
 
-import com.lansu.awakening.entity.Permission;
-import com.lansu.awakening.entity.RolePermissions;
-import com.lansu.awakening.mapper.RolePermissionsMapper;
-import com.mybatisflex.core.query.QueryColumn;
-import com.mybatisflex.core.query.QueryWrapper;
+
+import com.lansu.awakening.mapper.RolePermissionSecurityMapper;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.config.Customizer;
+import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 
-import java.util.HashMap;
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
-
-import static com.lansu.awakening.entity.table.PermissionTableDef.PERMISSION;
-import static com.lansu.awakening.entity.table.RoleTableDef.ROLE;
-import static com.mybatisflex.core.query.QueryMethods.select;
 
 
 /**
@@ -49,7 +42,7 @@ public class SecurityConfiguration {
     /**
      * 角色权限映射器
      */
-    private final RolePermissionsMapper rolePermissionsMapper;
+    private final RolePermissionSecurityMapper rolePermissionSecurityMapper;
 
     /**
      * 身份验证提供者
@@ -75,18 +68,6 @@ public class SecurityConfiguration {
      */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        Map<String, List<String>> rolePermission = getRolePermission();
-        rolePermission.forEach((key, value) -> {
-            try {
-                if (!value.isEmpty()) {
-                    log.info("初始化权限:角色({}),权限({})", key,value);
-                    http.authorizeHttpRequests(auth ->
-                            auth.requestMatchers(value.toArray(new String[0])).hasRole(key));
-                }
-            } catch (Exception e) {
-                log.warn("角色权限配置异常:{}", e.getMessage());
-            }
-        });
         http.csrf(AbstractHttpConfigurer::disable)
                 //放行静态资源和登录相关接口
                 .authorizeHttpRequests(authorizeRequests ->
@@ -102,6 +83,20 @@ public class SecurityConfiguration {
                                         "/swagger-ui/**",
                                         "/webjars/**",
                                         "/swagger-ui.html").permitAll()
+                                //动态权限验证
+                                .anyRequest().access((authenticationSupplier,requestAuthorizationContext)->{
+                                    // 当前用户的权限信息 比如角色
+                                    Collection<? extends GrantedAuthority> authorities
+                                            = authenticationSupplier.get().getAuthorities();
+                                    // 当前请求上下文
+                                    // 我们可以获取携带的参数
+                                    Map<String, String> variables = requestAuthorizationContext.getVariables();
+                                    // 我们可以获取原始request对象
+                                    HttpServletRequest request = requestAuthorizationContext.getRequest();
+                                    //todo 根据这些信息 和业务写逻辑即可 最终决定是否授权 isGranted
+                                    boolean isGranted = true;
+                                    return new AuthorizationDecision(isGranted);
+                                })
                                 .anyRequest().authenticated()
                 );
         //其它设置
@@ -134,34 +129,7 @@ public class SecurityConfiguration {
         return webSecurity -> webSecurity.ignoring().anyRequest();
     }
 
-    /**
-     * 获得角色权限
-     *
-     * @return {@link Map}<{@link String},{@link List}<{@link String}>>
-     */
-    private Map<String, List<String>> getRolePermission() {
-        Map<String, List<String>> roleMap = new HashMap<>();
-        QueryWrapper wrapper = QueryWrapper.create().from(ROLE);
-        List<RolePermissions> rolePermissionsList = rolePermissionsMapper.selectListByQuery(wrapper
-                , fieldQueryBuilder -> fieldQueryBuilder
-                        .field(RolePermissions::getPermissions)
-                        .queryWrapper(rolePermissions -> QueryWrapper.create()
-                                .select().from(PERMISSION)
-                                .where(PERMISSION.ID.in(
-                                        select(new QueryColumn("permission_id"))
-                                                .from("sys_role_permission")
-                                                .where("role_id = ?", rolePermissions.getId()))
-                                )
-                        )
-        );
-        //构建map映射
-        rolePermissionsList.forEach(rolePermissions -> {
-            roleMap.put(rolePermissions.getRoleCode()
-                    , rolePermissions.getPermissions().stream()
-                            .map(Permission::getApi).toList());
-        });
-        return roleMap;
-    }
+
 
 
 }

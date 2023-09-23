@@ -1,6 +1,6 @@
 package com.lansu.awakening.mapper;
 
-import com.lansu.awakening.entity.RolePermissionRel;
+import com.lansu.awakening.entity.RolePermission;
 import com.mybatisflex.core.BaseMapper;
 
 /**
@@ -9,5 +9,5 @@ import com.mybatisflex.core.BaseMapper;
  * @author sulan
  * @date 2023/08/04
  */
-public interface RolePermissionRelMapper extends BaseMapper<RolePermissionRel> {
+public interface RolePermissionMapper extends BaseMapper<RolePermission> {
 }

@@ -1,5 +1,6 @@
 package com.lansu.awakening.entity;
 
+
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
@@ -8,29 +9,26 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 /**
- * 角色
+ * 部门
  *
  * @author sulan
- * @date 2023/08/03
+ * @date 2023/09/23
  */
-@Table("sys_role")
+@Table("sys_dept")
 @Accessors(chain = true)
 @Data(staticConstructor = "create")
-public class Role {
-
+public class Dept {
     /**
      * 用户ID
      */
     @Id(keyType= KeyType.Generator, value= KeyGenerators.flexId)
-    private Long roleId;
+    private Long deptId;
 
-    /**
-     * 角色名
-     */
-    private String roleName;
+    private String deptName;
 
-    /**
-     * 角色代码
-     */
-    private String roleCode;
+    private Long parentId;
+
+    private String childrenId;
+
+
 }

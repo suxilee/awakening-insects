@@ -22,7 +22,7 @@ public class Permission {
      * 用户ID
      */
     @Id(keyType= KeyType.Generator, value= KeyGenerators.flexId)
-    private Long id;
+    private Long permissionId;
 
     /**
      * 许可名字
@@ -39,4 +39,44 @@ public class Permission {
      * api
      */
     private String api;
+
+    /**
+     * 父id
+     */
+    private Long parentId;
+
+    /**
+     * 孩子id
+     */
+    private String childrenId;
+
+    /**
+     * 权限类型
+     */
+    private Integer permissionType;
+
+    /**
+     * 组件
+     */
+    private String component;
+
+    /**
+     * 路由路径
+     */
+    private String path;
+
+    /**
+     * 路由名称
+     */
+    private String name;
+
+    /**
+     * 路由标题
+     */
+    private String title;
+
+    /**
+     * 请求方式
+     */
+    private String apiMethod;
 }

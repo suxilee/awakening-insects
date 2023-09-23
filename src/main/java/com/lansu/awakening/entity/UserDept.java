@@ -1,5 +1,6 @@
 package com.lansu.awakening.entity;
 
+
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
@@ -7,33 +8,25 @@ import com.mybatisflex.core.keygen.KeyGenerators;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.util.List;
-
 /**
- * 角色权限关联权限表查询
+ * 用户部门
  *
  * @author sulan
- * @date 2023/08/04
+ * @date 2023/09/23
  */
-@Table("sys_role")
+@Table("sys_user_dept")
 @Accessors(chain = true)
 @Data(staticConstructor = "create")
-public class RolePermissions {
+public class UserDept {
+
     /**
      * 用户ID
      */
     @Id(keyType= KeyType.Generator, value= KeyGenerators.flexId)
     private Long id;
 
-    /**
-     * 角色名
-     */
-    private String roleName;
 
-    /**
-     * 角色代码
-     */
-    private String roleCode;
+    private Long userId;
 
-    private List<Permission> permissions;
+    private Long DeptId;
 }
